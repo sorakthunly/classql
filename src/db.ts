@@ -49,6 +49,11 @@ export class Database {
     return extras ? this.conn.query(query, extras) : this.conn.query(query);
   }
 
+  /** Getting the connection for the pool */
+  public getConnection(): Promise<any> {
+    return this.conn.getConnection();
+  }
+
   /** Close the connection to the database */
   public close(): void {
     this.conn.close();
