@@ -33,7 +33,7 @@ export class Query<T extends Model> {
   public async get(wheres: ModelConstructor<T>): Promise<any> {
     let statement = 'SELECT * FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
-    let result = await this.db.prepare(statement);
+    let result = await this.db.query(statement);
     return result.length > 0 ? result[0] : null;
   }
 
@@ -42,10 +42,10 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public getAll(wheres: ModelConstructor<T>, options?: QueryOption): Promise<any[]> {
+  public getAll(wheres: ModelConstructor<T>, options?: QueryOption): Promise<any> {
     let statement = 'SELECT * FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
-    return this.db.prepare(statement);
+    return this.db.query(statement);
   }
 
   /**
@@ -55,7 +55,7 @@ export class Query<T extends Model> {
    */
   public save(data: any): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
-    return this.db.prepare(statement, data);
+    return this.db.query(statement, data);
   }
 
   // public saveAll(data: any[]): Promise<any> {
@@ -72,6 +72,6 @@ export class Query<T extends Model> {
     let statement = 'DELETE FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
 
-    return this.db.prepare(statement);
+    return this.db.query(statement);
   }
 }

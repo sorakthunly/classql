@@ -1,5 +1,5 @@
 import { Model, ModelConstructor } from './model';
-import { Query } from './query';
+import { Query } from './on';
 
 const mysql = require('promise-mysql');
 
@@ -36,7 +36,7 @@ export class Database {
    * Runs query on a given model
    * @param model
    */
-  public query<T extends Model>(model: ModelConstructor<T>) {
+  public on<T extends Model>(model: ModelConstructor<T>) {
     return new Query(this, model);
   }
 
@@ -45,7 +45,7 @@ export class Database {
    * @param query
    * @return promised query data
    */
-  public prepare(query: string, extras?: any): Promise<any> {
+  public query(query: string, extras?: any): Promise<any> {
     return extras ? this.conn.query(query, extras) : this.conn.query(query);
   }
 
