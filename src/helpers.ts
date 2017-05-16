@@ -6,7 +6,7 @@ import { MODEL_META_KEY } from './model';
  * @param model
  * @return model meta data
  */
-export function getMetaData(model: any) {
+export function getMetaData(ctor: Function) {
   const meta = Reflect.getMetadata(MODEL_META_KEY, ctor.prototype);
   return meta.name;
 }
