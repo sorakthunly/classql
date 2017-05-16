@@ -42,7 +42,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public getAll(wheres: ModelConstructor<T>, options?: QueryOption): Promise<any> {
+  public getAll(wheres: ModelConstructor<T>, options?: QueryOption): Promise<any[]> {
     let statement = 'SELECT * FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
     return this.db.prepare(statement);

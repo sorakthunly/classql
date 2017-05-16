@@ -1,20 +1,12 @@
 # classpass
-A light-weight es5-compatible typescript class validator for basic types (string, number and boolean).
+A light-weight Typescript ORM for MySQL basic CRUD.
 
 ## Installation
-Run `npm install --save classpass`
+Run `npm install --save classql`
 
 ## Example Use
 
 ```typescript
-import { Model, attr, string, boolean, number, validate } from 'classpass';
+import * as classql from 'classql';
 
-class Person extends Model {
-  @attr(string)
-  name: string;
-}
-
-let p = new Person({ name: 'John'});
-
-validate(p).then(doSth).catch(doSth);
 ```
