@@ -31,7 +31,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public async get(wheres: any, options: string[]): Promise<any> {
+  public async get(wheres: any, options?: string[]): Promise<any> {
     if (!wheres) throw new Error(errors.where);
 
     let statement = 'SELECT * FROM ' + this.table;
