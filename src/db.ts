@@ -49,6 +49,11 @@ export class Database {
     return extras ? this.conn.query(query, extras) : this.conn.query(query);
   }
 
+  /** Escape any mysql injection string */
+  public escape(data: string): string {
+    return this.conn.escape(data);
+  }
+
   /** Getting the connection for the pool */
   public getConnection(): Promise<any> {
     return this.conn.getConnection();

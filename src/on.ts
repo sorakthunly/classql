@@ -22,7 +22,7 @@ export class Query<T extends Model> {
   constructor(db: Database, model: ModelConstructor<T>) {
     this.db = db;
     this.model = model;
-    this.table = getMetaData(model).name;
+    this.table = getMetaData(model);
   }
 
   /**
@@ -30,9 +30,12 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public async get(wheres: ModelConstructor<T>): Promise<any> {
+  public async get(wheres: any): Promise<any> {
+    if (!wheres) throw new Error(errors.where);
+
     let statement = 'SELECT * FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
+    
     let result = await this.db.query(statement);
     return result.length > 0 ? result[0] : null;
   }
@@ -42,9 +45,9 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public getAll(wheres: ModelConstructor<T>, options?: QueryOption): Promise<any> {
+  public getAll(wheres?: any, options?: QueryOption): Promise<any> {
     let statement = 'SELECT * FROM ' + this.table;
-    statement = mapWhereClause(statement, wheres);
+    statement = wheres ? mapWhereClause(statement, wheres) : statement;
     return this.db.query(statement);
   }
 

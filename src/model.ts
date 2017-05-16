@@ -7,11 +7,10 @@ export abstract class Model {}
 export type ModelConstructor<T extends Model> = typeof Model & { new(): T }; 
 
 export function model(name: string) {
-  return (target: Object, key: string) => {
-    let meta = { ... Reflect.getMetadata(MODEL_META_KEY, target) };
-    meta[name] = name;
+  return (ctor: Function): void => {
+    let meta = { ... Reflect.getMetadata(MODEL_META_KEY, ctor.prototype) };
+    meta.name = name;
 
-    Reflect.defineMetadata(MODEL_META_KEY, meta, target);
-  }
+    Reflect.defineMetadata(MODEL_META_KEY, meta, ctor.prototype);
+  };
 }
-
