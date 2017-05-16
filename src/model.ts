@@ -2,7 +2,9 @@ import 'reflect-metadata';
 
 export const MODEL_META_KEY = 'MODEL:META:KEY';
 
-export abstract class Model {}
+export abstract class Model {
+  id?: number;
+}
 
 export type ModelConstructor<T extends Model> = typeof Model & { new(): T }; 
 

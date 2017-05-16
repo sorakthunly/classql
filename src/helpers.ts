@@ -32,7 +32,7 @@ export function mapWhereClause(statement: string, wheres: any): string {
  * @param wheres  An object to be converted
  * @return the finalized statement
  */
-export function mapOptionClause(statement: string, options: any) {
+export function mapOptionClause(statement: string, options: any): string {
   return Object.keys(options).reduce((prev, current): string => {
     const value = mysql.escape(options[current]);
     return [prev, current, '=', value].join(' ');

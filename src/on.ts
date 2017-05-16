@@ -1,3 +1,4 @@
+const mysql = require('promise-mysql');
 import 'reflect-metadata';
 import { mapWhereClause, getMetaData } from './helpers';
 import { Model, ModelConstructor } from './model';
@@ -30,12 +31,14 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public async get(wheres: any): Promise<any> {
+  public async get(wheres: any, options: string[]): Promise<any> {
     if (!wheres) throw new Error(errors.where);
 
     let statement = 'SELECT * FROM ' + this.table;
     statement = mapWhereClause(statement, wheres);
-    
+
+    if (options) statement = statement.replace('*', options.toString());
+
     let result = await this.db.query(statement);
     return result.length > 0 ? result[0] : null;
   }
@@ -56,14 +59,49 @@ export class Query<T extends Model> {
    * @param data
    * @return promised return query
    */
-  public save(data: any): Promise<any> {
+  public save(data: T): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
     return this.db.query(statement, data);
   }
 
-  // public saveAll(data: any[]): Promise<any> {
-  //   return Promise.resolve(1);
-  // }
+  /**
+   * Save a list of objects to the db
+   * @param data
+   * @return promised return query
+   */
+  public saveAll(items: T[]): Promise<any> {
+    let statement = 'INSERT INTO ' + this.table;
+
+    const columns = Object.keys(items[0]);
+    statement += ' (' + columns.toString() + ') VALUES ';
+
+    let count = 0;
+    let length = columns.length;
+    items.forEach(data => {
+      count++;
+      const values = columns.map(field => mysql.escape(data[field])).toString();
+      statement += '(' + values + ')';
+      if (count !== length) statement += ', ';
+    });
+
+    if (columns.indexOf('id') > -1) {
+      statement += ' ON DUPLICATE KEY UPDATE ';
+      const noIdColumns = columns.filter(i => i !== 'id');
+
+      let count = 0;
+      let length = noIdColumns.length;
+      items.forEach(data => {
+        count++;
+        const values = noIdColumns.map(field => {
+          return [' ', field, '= VALUES(' + field + ')'].join(' ');
+        });
+        statement += values;
+        if (count !== length) statement += ', ';
+      });
+    }
+
+    return this.db.query(statement);
+  }
 
   /** Delete an item from the db
    * @param wheres
