@@ -1,6 +1,6 @@
 const mysql = require('promise-mysql');
 import 'reflect-metadata';
-import { mapWhereClause, getMetaData } from './helpers';
+import { mapWhereClause, mapOptionClause, getMetaData } from './helpers';
 import { Model, ModelConstructor } from './model';
 import { Database } from './db';
 
@@ -50,7 +50,14 @@ export class Query<T extends Model> {
    */
   public getAll(wheres?: any, options?: QueryOption): Promise<any> {
     let statement = 'SELECT * FROM ' + this.table;
-    statement = wheres ? mapWhereClause(statement, wheres) : statement;
+
+    if (wheres && (wheres.offset || wheres.limit)) {
+      statement = mapOptionClause(statement, wheres);
+    } else if (wheres && !wheres.offset && !wheres.limit) {
+      statement = mapWhereClause(statement, wheres);
+      if (options) statement = mapOptionClause(statement, options);
+    }
+
     return this.db.query(statement);
   }
 
