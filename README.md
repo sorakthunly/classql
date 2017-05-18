@@ -1,5 +1,5 @@
 # classql
-A light-weight Typescript ORM for MySQL basic CRUD that is database-model-indepedent.
+A light-weight Node.js Typescript ORM for MySQL basic CRUD that is database-model-indepedent.
 
 ### What it does not do:
 Run TABLE or VIEW creation queries for you.
