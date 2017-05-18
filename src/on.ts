@@ -75,16 +75,16 @@ export class Query<T extends Model> {
     statement += ' (' + columns.toString() + ') VALUES ?';
 
     let data = items.map(item => {
-      return columns.map(field => mysql.escape(item[field]));
+      return columns.map(field => item[field]);
     });
 
     if (columns.indexOf('id') > -1) {
       statement += ' ON DUPLICATE KEY UPDATE ';
       const noIdColumns = columns.filter(field => field !== 'id');
 
-      for (let i = 0; i < items.length; i++) {
+      for (let i = 0; i < noIdColumns.length; i++) {
         statement += noIdColumns[i] + ' = VALUES(' + noIdColumns[i] + ')';
-        if (items.length - i !== 1) statement += ', ';
+        if (noIdColumns.length - i !== 1) statement += ', ';
       };
     }
 
