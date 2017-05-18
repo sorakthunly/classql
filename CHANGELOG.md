@@ -1,3 +1,7 @@
+#0.1.4
+
+* Fixed bug on save() method
+
 #0.1.3
 
 * Updated README.md

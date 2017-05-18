@@ -67,8 +67,10 @@ export class Query<T extends Model> {
    * @return promised return query
    */
   public save(data: T): Promise<any> {
-    let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ? WHERE id = ?'].join(' ');
-    return this.db.query(statement, [data, data.id]);
+    let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
+    if (data.id) statement += ' WHERE id = ?';
+    let queryData = data.id ? [data, data.id] : data;
+    return this.db.query(statement, queryData);
   }
 
   /**
