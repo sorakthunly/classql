@@ -79,9 +79,17 @@ let account = new UserAccount({
   firstName: 'John',
   lastName: 'Doe'
 });
-
 let result = await db.on(UserAccount).save(account);
 let id = result.insertId;
+
+
+/** CREATE ALL OR UPDATE ALL */
+// If no id field exists on every object in a list, this method runs INSERT query.
+// Otherwise, it will run INSERT and ON DUPLICATE UPDATE.
+let items = [
+  new UserAccount({ ... }), new UserAccount({ ... }), new UserAccount({ ... })
+];
+await db.on(UserAccount).saveAll(items);
 
 
 // Alternatively, to enter prepared sql statement just do:
