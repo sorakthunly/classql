@@ -60,8 +60,8 @@ export class Query<T extends Model> {
    * @return promised return query
    */
   public save(data: T): Promise<any> {
-    let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
-    return this.db.query(statement, data);
+    let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ? WHERE id = ?'].join(' ');
+    return this.db.query(statement, [data, data.id]);
   }
 
   /**
@@ -71,36 +71,24 @@ export class Query<T extends Model> {
    */
   public saveAll(items: T[]): Promise<any> {
     let statement = 'INSERT INTO ' + this.table;
-
     const columns = Object.keys(items[0]);
-    statement += ' (' + columns.toString() + ') VALUES ';
+    statement += ' (' + columns.toString() + ') VALUES ?';
 
-    let count = 0;
-    let length = columns.length;
-    items.forEach(data => {
-      count++;
-      const values = columns.map(field => mysql.escape(data[field])).toString();
-      statement += '(' + values + ')';
-      if (count !== length) statement += ', ';
+    let data = items.map(item => {
+      return columns.map(field => mysql.escape(item[field]));
     });
 
     if (columns.indexOf('id') > -1) {
       statement += ' ON DUPLICATE KEY UPDATE ';
-      const noIdColumns = columns.filter(i => i !== 'id');
+      const noIdColumns = columns.filter(field => field !== 'id');
 
-      let count = 0;
-      let length = noIdColumns.length;
-      items.forEach(data => {
-        count++;
-        const values = noIdColumns.map(field => {
-          return [' ', field, '= VALUES(' + field + ')'].join(' ');
-        });
-        statement += values;
-        if (count !== length) statement += ', ';
-      });
+      for (let i = 0; i < items.length; i++) {
+        statement += noIdColumns[i] + ' = VALUES(' + noIdColumns[i] + ')';
+        if (items.length - i !== 1) statement += ', ';
+      };
     }
 
-    return this.db.query(statement);
+    return this.db.query(statement, [data]);
   }
 
   /** Delete an item from the db
