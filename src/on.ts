@@ -48,7 +48,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public getAll(wheres?: any, options?: QueryOption): Promise<any> {
+  public async getAll(wheres?: any, options?: QueryOption): Promise<any> {
     let statement = 'SELECT * FROM ' + this.table;
 
     if (wheres && (wheres.offset || wheres.limit)) {
@@ -66,7 +66,7 @@ export class Query<T extends Model> {
    * @param data
    * @return promised return query
    */
-  public save(data: T): Promise<any> {
+  public async save(data: T): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
     if (data.id) statement += ' WHERE id = ?';
     let queryData = data.id ? [data, data.id] : data;
@@ -78,7 +78,7 @@ export class Query<T extends Model> {
    * @param data
    * @return promised return query
    */
-  public saveAll(items: T[]): Promise<any> {
+  public async saveAll(items: T[]): Promise<any> {
     let statement = 'INSERT INTO ' + this.table;
     const columns = Object.keys(items[0]);
     statement += ' (' + columns.toString() + ') VALUES ?';
@@ -104,7 +104,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promised return query
    */
-  public delete(wheres: any): Promise<any> {
+  public async delete(wheres: any): Promise<any> {
     if (!wheres) throw new Error(errors.where);
 
     let statement = 'DELETE FROM ' + this.table;

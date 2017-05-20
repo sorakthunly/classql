@@ -1,6 +1,6 @@
 {
   "name": "classql",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/index.js",
   "bugs": "https://github.com/sorakthunly/classql/issues",
   "description": "A light-weight Typescript ORM for MySQL basic CRUD.",
@@ -17,6 +17,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
+    "es6-promisify": "^5.0.0",
     "promise-mysql": "^3.0.1",
     "reflect-metadata": "^0.1.10",
     "typescript": "^2.2.2"

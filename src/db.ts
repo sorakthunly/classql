@@ -2,6 +2,7 @@ import { Model, ModelConstructor } from './model';
 import { Query } from './on';
 
 const mysql = require('promise-mysql');
+const promisify = require('es6-promisify');
 
 /** Default MySQL connection option */
 export interface ConnectionOption {
@@ -47,6 +48,24 @@ export class Database {
    */
   public query(query: string, extras?: any): Promise<any> {
     return extras ? this.conn.query(query, extras) : this.conn.query(query);
+  }
+
+  /**
+   * Starts the transaction
+   * @param callback
+   */
+  public transaction(callback: Function): Promise<any> {
+    return this.conn.beginTransaction(callback);
+  }
+
+  /** Commit a transaction */
+  public commit(): Promise<any> {
+    return promisify(this.conn.commit, this.conn);
+  }
+
+  /** Rollback a transaction */
+  public rollback(): Promise<any> {
+    return promisify(this.conn.rollback, this.conn);
   }
 
   /** Escape any mysql injection string */
