@@ -95,4 +95,9 @@ await db.on(UserAccount).saveAll(items);
 // Alternatively, to enter prepared sql statement just do:
 db.query('SELECT * FROM USER_ACCOUNTS WHERE id > 5').then(doSth).catch(doSthElse);
 
+
+/** COUNT */
+// Returns the number of result counted e.g. 12
+await db.on(UserAccount).count({ name: 'John' });
+
 ```

@@ -112,4 +112,18 @@ export class Query<T extends Model> {
 
     return this.db.query(statement);
   }
+
+  /**
+   * Count items by where clause
+   * @param wheres
+   * @return promised returned query
+   */
+  public async count(wheres: any): Promise<any> {
+    if (!wheres) throw new Error(errors.where);
+
+     let statement = 'SELECT COUNT(*) AS count FROM ' + this.table;
+     statement = mapWhereClause(statement, wheres);
+     const data = await this.db.query(statement);
+     return data.count;
+  }
 }

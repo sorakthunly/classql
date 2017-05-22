@@ -1,3 +1,7 @@
+#0.1.6
+
+* Added count method
+
 #0.1.5
 
 * Added transaction, commit and rollback method
