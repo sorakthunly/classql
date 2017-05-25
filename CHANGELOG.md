@@ -1,5 +1,9 @@
 #0.1.6
 
+* Fixed bug with count method. Added return type to get and getAll method
+
+#0.1.6
+
 * Added count method
 
 #0.1.5

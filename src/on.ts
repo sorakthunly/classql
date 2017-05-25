@@ -31,7 +31,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public async get(wheres: any, options?: string[]): Promise<any> {
+  public async get(wheres: any, options?: string[]): Promise<T> {
     if (!wheres) throw new Error(errors.where);
 
     let statement = 'SELECT * FROM ' + this.table;
@@ -48,7 +48,7 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promise of the db query
    */
-  public async getAll(wheres?: any, options?: QueryOption): Promise<any> {
+  public async getAll(wheres?: any, options?: QueryOption): Promise<T[]> {
     let statement = 'SELECT * FROM ' + this.table;
 
     if (wheres && (wheres.offset || wheres.limit)) {
@@ -118,12 +118,12 @@ export class Query<T extends Model> {
    * @param wheres
    * @return promised returned query
    */
-  public async count(wheres: any): Promise<any> {
+  public async count(wheres: any): Promise<number> {
     if (!wheres) throw new Error(errors.where);
 
      let statement = 'SELECT COUNT(*) AS count FROM ' + this.table;
      statement = mapWhereClause(statement, wheres);
      const data = await this.db.query(statement);
-     return data.count;
+     return data[0].count;
   }
 }
