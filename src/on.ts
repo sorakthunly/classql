@@ -19,7 +19,6 @@ export class Query<T extends Model> {
   public options: any[];
   public table: string;
 
-
   constructor(db: Database, model: ModelConstructor<T>) {
     this.db = db;
     this.model = model;
@@ -40,7 +39,7 @@ export class Query<T extends Model> {
     if (options) statement = statement.replace('*', options.toString());
 
     let result = await this.db.query(statement);
-    return result.length > 0 ? result[0] : null;
+    return result.length > 0 ? result[0] : {};
   }
 
   /**
@@ -51,7 +50,7 @@ export class Query<T extends Model> {
   public async getAll(wheres?: any, options?: QueryOption): Promise<T[]> {
     let statement = 'SELECT * FROM ' + this.table;
 
-    if (wheres && (wheres.offset || wheres.limit)) {
+    if (wheres && !options && (wheres.offset || wheres.limit)) {
       statement = mapOptionClause(statement, wheres);
     } else if (wheres && !wheres.offset && !wheres.limit) {
       statement = mapWhereClause(statement, wheres);
@@ -69,7 +68,9 @@ export class Query<T extends Model> {
   public async save(data: T): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
     if (data.id) statement += ' WHERE id = ?';
-    let queryData = data.id ? [data, data.id] : data;
+
+    const queryData = data.id ? [data, data.id] : data;
+
     return this.db.query(statement, queryData);
   }
 
