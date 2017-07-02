@@ -1,8 +1,8 @@
-#0.1.7
+#0.1.8
 
 * Return an empty object instead of null for an empty get
 
-#0.1.6
+#0.1.7
 
 * Fixed bug with count method. Added return type to get and getAll method
 

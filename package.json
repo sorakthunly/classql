@@ -1,6 +1,6 @@
 {
   "name": "classql",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "dist/index.js",
   "bugs": "https://github.com/sorakthunly/classql/issues",
   "description": "A light-weight Typescript ORM for MySQL basic CRUD.",
