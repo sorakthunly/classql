@@ -74,7 +74,7 @@ export class Query<T extends Model> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
 
     statement += where ? 
-      (' WHERE' + where.field + ' = ?') : data.id ?
+      (' WHERE ' + where.field + ' = ?') : data.id ?
       (' WHERE id = ?') : '';
 
     const queryData = where ? [data, where.value] : data.id ? [data, data.id] : data;

@@ -1,4 +1,8 @@
-#0.1.10
+#0.2.1
+
+* Fixed incorrect syntax on save where query
+
+#0.2.0
 
 * Makes where query optional (bug)
 
