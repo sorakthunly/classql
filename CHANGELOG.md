@@ -1,3 +1,7 @@
+#0.1.10
+
+* Makes where query optional (bug)
+
 #0.1.9
 
 * Allow where query on data save

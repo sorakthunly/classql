@@ -70,7 +70,7 @@ export class Query<T extends Model> {
    * @param data
    * @return promised return query
    */
-  public async save(data: T, where: SaveWhere): Promise<any> {
+  public async save(data: T, where?: SaveWhere): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
 
     statement += where ? 
