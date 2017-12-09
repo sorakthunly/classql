@@ -1,3 +1,7 @@
+#0.2.2
+
+* Fixed incorrect syntax on save where query
+
 #0.2.1
 
 * Fixed incorrect syntax on save where query
