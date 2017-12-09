@@ -1,3 +1,7 @@
+#0.1.9
+
+* Allow where query on data save
+
 #0.1.8
 
 * Return an empty object instead of null for an empty get

@@ -13,6 +13,11 @@ export interface QueryOption {
   offset: number;
 }
 
+export interface SaveWhere {
+  field: string;
+  value: any;
+}
+
 export class Query<T extends Model> {
   public db: Database;
   public model: ModelConstructor<T>;
@@ -65,11 +70,14 @@ export class Query<T extends Model> {
    * @param data
    * @return promised return query
    */
-  public async save(data: T): Promise<any> {
+  public async save(data: T, where: SaveWhere): Promise<any> {
     let statement = [data.id ? 'UPDATE' : 'INSERT INTO', this.table, 'SET ?'].join(' ');
-    if (data.id) statement += ' WHERE id = ?';
 
-    const queryData = data.id ? [data, data.id] : data;
+    statement += where ? 
+      (' WHERE' + where.field + ' = ?') : data.id ?
+      (' WHERE id = ?') : '';
+
+    const queryData = where ? [data, where.value] : data.id ? [data, data.id] : data;
 
     return this.db.query(statement, queryData);
   }
